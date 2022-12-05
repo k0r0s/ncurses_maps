@@ -1,6 +1,7 @@
 #include <ncurses.h>
 #include <window.h>
 #include <stdlib.h>
+#include <string.h>
 #include <stdbool.h>
 
 
@@ -64,7 +65,7 @@ void printWinParams(ROOM *p_win)
 }
 
 
-void createBoxBorders(ROOM *p_win, bool flag)
+void drawBoxBorder(ROOM *p_win, bool flag)
 {	int i, j;
 	int x, y, w, h;
 
@@ -93,7 +94,7 @@ void createBoxBorders(ROOM *p_win, bool flag)
 
 }
 
-void createBoxFull(ROOM *p_win, bool flag)
+void drawBoxFull(ROOM *p_win, bool flag)
 {
 	int i,j;
 	int x,y,w,h;
@@ -179,10 +180,79 @@ void layoutRooms(ROOM * rooms, int num, int MAP_HEIGHT, int MAP_WIDTH)
 	}
 }
 
-/* void assignDoors(ROOM * rooms, int N_ROOMS, int MAX_DOOR_NUM)
+void assignConnections(ROOM * rooms, int N_ROOMS, int MAX_CONN_NUM)
 {
 	for (int i = 0; i < N_ROOMS; i++)
 	{
-		rooms[i]
+		rooms[i].connects = 1 + rand() % (MAX_CONN_NUM);
+		int closest[rooms[i].connects];
+		rooms[i].closest = closest;
 	}
-} */
+}
+
+void getCenters(ROOM * rooms, int N_ROOMS)
+{
+	for (int i = 0; i < N_ROOMS; i++)
+	{
+		rooms[i].centerx = (rooms[i].startx + rooms[i].startx + rooms[i].width)/2;
+		rooms[i].centery = (rooms[i].starty + rooms[i].starty + rooms[i].height)/2;
+	}
+}
+
+int cmpfunc (const void * a, const void * b) { // for qsort
+   return ( *(int*)a - *(int*)b );
+}
+
+
+void getDistancesToClosest(ROOM * rooms, int N_ROOMS) // THIS IS WRONG 
+{
+	int distancesCenter[N_ROOMS][N_ROOMS];
+	int * original = malloc(N_ROOMS * sizeof(int));
+
+	for (int i = 0; i < N_ROOMS; i++)
+	{
+		for (int j = 0; j < N_ROOMS; j++)
+		{
+			distancesCenter[i][j]= (rooms[i].centerx - rooms[j].centerx)*(rooms[i].centerx - rooms[j].centerx) + 
+								   (rooms[i].centery - rooms[j].centery)*(rooms[i].centery - rooms[j].centery);
+		}
+		memcpy(original, distancesCenter[i], N_ROOMS * sizeof(int));
+		qsort(distancesCenter[i], N_ROOMS, sizeof(int),cmpfunc);
+
+		for (int j = 0; j < rooms[i].connects; j++)
+		{
+			for (int k = 0; k < N_ROOMS; k ++)
+			{
+				if (distancesCenter[i][j] == original[k]) 
+					rooms[i].closest[j] = k;
+			}
+		}
+	}
+	
+}
+
+void drawConnections(ROOM * rooms, int N_ROOMS)
+{
+	int distx,disty;
+
+	for (int i = 0; i < N_ROOMS; i++)
+	{
+		for (int j = 0; j < rooms[i].connects; j++)
+		{
+			distx = rooms[i].centerx - rooms[rooms[i].closest[j]].centerx;
+			disty = rooms[i].centery - rooms[rooms[i].closest[j]].centery;
+
+			if (rand() % 2 != 0) 
+			{
+				mvhline(rooms[i].centery, rooms[i].centerx, rooms[i].border.bs, distx);
+			}
+			else 
+			{
+				mvhline(rooms[i].centery, rooms[i].centerx, rooms[i].border.ts, distx);
+			}
+		}
+
+	}
+	//initWinParams(&rooms[n], height, width, starty, startx);
+}
+

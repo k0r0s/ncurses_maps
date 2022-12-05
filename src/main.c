@@ -35,6 +35,7 @@ int main(int c, char *argv[])
 	box(small_win, 0, 0);
 	mvwaddstr(small_win, 1,1,"<HELP>");
 	mvwaddstr(small_win, 3,3,"F1<QUIT>");
+	mvwaddstr(small_win,5,3,"ANY KEY<GENERATE MAP>");
 	touchwin(base_win);
 	wrefresh(small_win);
 	getch();
@@ -47,11 +48,17 @@ int main(int c, char *argv[])
     {
 		
         layoutRooms(rooms,N_ROOMS,LINES-2,COLS-2);
+		assignConnections(rooms,N_ROOMS,3);
+		getCenters(rooms,N_ROOMS);
+		getDistancesToClosest(rooms,N_ROOMS);
+
 		clear();
 		for (int i = 0; i < N_ROOMS; i ++)
 		{
-			createBoxBorders(&rooms[i], TRUE);
+			drawBoxBorder(&rooms[i], TRUE);
 		}
+		printf("%d \n",3);
+		//drawConnections(rooms,N_ROOMS); causes SegFault ! xD
 		
         ch = getch();
         toggleWin(small_win);

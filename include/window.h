@@ -14,19 +14,27 @@ typedef struct _ROOM_struct {
 
 	int startx, starty;
 	int height, width;
+	int centerx, centery;
 	bool is_passage;
+	int connects;
+	int * closest;
 	WIN_BORDER border;
 }ROOM;
 
 void toggleWin(WINDOW *p_win);
 void initWinParams(ROOM *p_win, int height, int width, int init_y, int init_x);
 void printWinParams(ROOM *p_win);
-void createBoxBorders(ROOM *win, bool flag);
-void createBoxFull(ROOM *win, bool flag);
+void drawBoxBorder(ROOM *win, bool flag);
+void drawBoxFull(ROOM *win, bool flag);
 
 bool valueInRange(int value, int min, int max);
 bool rectOverlap(ROOM A, ROOM B);
 bool checkAllOverlap(ROOM * rooms,int n);
 void layoutRooms(ROOM * rooms, int num, int MAP_HEIGHT, int MAP_WIDTH);
+void assignConnections(ROOM * rooms, int N_ROOMS, int MAX_CONN_NUM);
+void getCenters(ROOM * rooms, int N_ROOMS);
+int cmpfunc (const void * a, const void * b);
+void getDistancesToClosest(ROOM * rooms, int N_ROOMS);
+void drawConnections(ROOM * rooms, int N_ROOMS);
 
 #endif
