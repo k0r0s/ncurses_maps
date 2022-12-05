@@ -1,6 +1,10 @@
 #include <ncurses.h>
 #include <window.h>
 #include <stdlib.h>
+#include <stdbool.h>
+#include <time.h>
+
+
 
 
 void toggle_win(WINDOW *p_win)
@@ -12,7 +16,7 @@ void toggle_win(WINDOW *p_win)
 
 void init_win_params(ROOM *p_win, int height, int width, int init_y, int init_x)
 {
-	if (p_win->is_passage)
+	if (p_win->is_passage) // TODO change -- only works for horizontal passages.
 	{
 		p_win->height = height;
 		p_win->width = width;
@@ -114,25 +118,65 @@ void create_box_full(ROOM *p_win, bool flag)
 	refresh();
 }
 
+bool valueInRange(int value, int min, int max)
+{ return (value >= min) && (value <= max); }
 
-void layout_rooms(int num, int MAP_HEIGHT, int MAP_WIDTH)
+bool rectOverlap(ROOM A, ROOM B)
 {
-	ROOM rooms[num];
+    bool xOverlap = valueInRange(A.startx, B.startx, B.startx + B.width) ||
+                    valueInRange(B.startx, A.startx, A.startx + A.width);
+
+    bool yOverlap = valueInRange(A.starty, B.starty, B.starty + B.height) ||
+                    valueInRange(B.starty, A.starty, A.starty + A.height);
+
+    return xOverlap && yOverlap;
+}
+
+bool checkAllOverlap(ROOM * rooms,int n)
+{
+	ROOM A = rooms[n];
+	for (int i = 0; i < n; i++)
+	{
+		ROOM B = rooms[i];
+		if (rectOverlap(A,B)){
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+
+void layout_rooms(ROOM * rooms, int num, int MAP_HEIGHT, int MAP_WIDTH)
+{
+
 	int ROOM_MAX_WIDTH =  20;
 	int ROOM_MAX_HEIGHT = 10;
 	int width, height, startx, starty, n;
-	
-	for (n = 0; n < num; n++){
-		width = rand() % (ROOM_MAX_WIDTH + 1);
-		height = rand() % (ROOM_MAX_HEIGHT + 1);
 
-		startx = rand() % (MAP_WIDTH + 1) + 1;
-		starty = rand() % (MAP_HEIGHT + 1) + 1;
-		rooms[n].is_passage = FALSE;
+	width = rand() % (ROOM_MAX_WIDTH + 1);
+	height = rand() % (ROOM_MAX_HEIGHT + 1);
+
+	startx = rand() % (MAP_WIDTH + 1) + 1;
+	starty = rand() % (MAP_HEIGHT + 1) + 1;
+	rooms[0].is_passage = FALSE;
+
+	init_win_params(&rooms[0], height, width, starty, startx);
+
+	for (n = 0; n < num; n++)
+	{
+		do
+		{
+			width = rand() % (ROOM_MAX_WIDTH + 1);
+			height = rand() % (ROOM_MAX_HEIGHT + 1);
+
+			startx = rand() % (MAP_WIDTH + 1) + 1;
+			starty = rand() % (MAP_HEIGHT + 1) + 1;
+			rooms[n].is_passage = FALSE;
+
+			init_win_params(&rooms[n], height, width, starty, startx);
+
+		} while (checkAllOverlap(rooms,n));
+
+		create_box_full(&rooms[n], TRUE);
 		
-		init_win_params(&rooms[n], height, width, starty, startx);
-		create_box_full(&rooms[n],TRUE);
 	}
-
-
 }

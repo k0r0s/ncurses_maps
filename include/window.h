@@ -1,6 +1,10 @@
 #ifndef WINDOW_H
 #define WINDOW_H 
 
+#define MAX(a,b) ((a) > (b) ? (a) : (b))
+#define MIN(a,b) ((a) < (b) ? (a) : (b))
+#define CLAMP(a) ((a) < 0 ? 0: (a))
+
 typedef struct _win_border_struct {
 	chtype 	ls, rs, ts, bs, 
 	 	tl, tr, bl, br;
@@ -20,6 +24,9 @@ void print_win_params(ROOM *p_win);
 void create_box_borders(ROOM *win, bool flag);
 void create_box_full(ROOM *win, bool flag);
 
-void layout_rooms(int num, int MAP_HEIGHT, int MAP_WIDTH);
+bool valueInRange(int value, int min, int max);
+bool rectOverlap(ROOM A, ROOM B);
+bool checkAllOverlap(ROOM * rooms,int n);
+void layout_rooms(ROOM * rooms, int num, int MAP_HEIGHT, int MAP_WIDTH);
 
 #endif

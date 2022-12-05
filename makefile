@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -lncurses -I./include
 SOURCES = ./src/*.c 
-OUTDIR = ./bin/
+OUTDIR = ./bin
 
 
 

@@ -1,6 +1,8 @@
 #include <ncurses.h>
 #include <window.h>
+#include <stdlib.h>
 
+#define N_ROOMS 10
 
 int main(int c, char *argv[])
 	{
@@ -22,6 +24,7 @@ int main(int c, char *argv[])
 	/* CREATE AND DISPLAY THE BASE WINDOW */
 	base_win = newwin(maxy, maxx, 0,0);
 	box(base_win, 0, 0);
+	mvwaddstr(base_win, 2,2,"<Press any key to toggle>");
 	touchwin(base_win);
 	wrefresh(base_win);
 	getch();
@@ -39,10 +42,13 @@ int main(int c, char *argv[])
 	init_win_params(&passage1,1,10, 7,50);
 
     int ch;
+	ROOM * rooms = malloc(N_ROOMS*sizeof(ROOM));
 
     while (ch != KEY_F(1))
     {
-        layout_rooms(100,LINES-2,COLS-2);
+		wclear(base_win);
+        layout_rooms(rooms,N_ROOMS,LINES-2,COLS-2);
+
         ch = getch();
         toggle_win(small_win);
         ch = getch();
