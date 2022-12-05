@@ -57,7 +57,6 @@ int main(int c, char *argv[])
 		{
 			drawBoxBorder(&rooms[i], TRUE);
 		}
-		printf("%d \n",3);
 		//drawConnections(rooms,N_ROOMS); causes SegFault ! xD
 		
         ch = getch();
