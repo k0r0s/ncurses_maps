@@ -2,19 +2,19 @@
 #include <window.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <time.h>
 
 
 
 
-void toggle_win(WINDOW *p_win)
+
+void toggleWin(WINDOW *p_win)
 {
     touchwin(p_win);
 	wrefresh(p_win);
 }
 
 
-void init_win_params(ROOM *p_win, int height, int width, int init_y, int init_x)
+void initWinParams(ROOM *p_win, int height, int width, int init_y, int init_x)
 {
 	if (p_win->is_passage) // TODO change -- only works for horizontal passages.
 	{
@@ -23,14 +23,14 @@ void init_win_params(ROOM *p_win, int height, int width, int init_y, int init_x)
 		p_win->starty = init_y;	
 		p_win->startx = init_x + p_win->width;
 
-		p_win->border.ls = ACS_VLINE;
-		p_win->border.rs = ACS_VLINE;
-		p_win->border.ts = ACS_HLINE;
-		p_win->border.bs = ACS_HLINE;
-		p_win->border.tl = ACS_LLCORNER;
-		p_win->border.tr = ACS_LRCORNER;
-		p_win->border.bl = ACS_ULCORNER;
-		p_win->border.br = ACS_URCORNER;
+		p_win->border.ls = '|';//ACS_VLINE;
+		p_win->border.rs = '|';//ACS_VLINE;
+		p_win->border.ts = '-';//ACS_HLINE;
+		p_win->border.bs = '-';//ACS_HLINE;
+		p_win->border.tl = '+';//ACS_LLCORNER;
+		p_win->border.tr = '+';//ACS_LRCORNER;
+		p_win->border.bl = '+';//ACS_ULCORNER;
+		p_win->border.br = '+';//ACS_URCORNER;
 	} 
 	else 
 	{
@@ -40,21 +40,21 @@ void init_win_params(ROOM *p_win, int height, int width, int init_y, int init_x)
 		p_win->startx = init_x;
 
 
-		p_win->border.ls = ACS_VLINE;
-		p_win->border.rs = ACS_VLINE;
-		p_win->border.ts = ACS_HLINE;
-		p_win->border.bs = ACS_HLINE;
-		p_win->border.tl = ACS_ULCORNER;
-		p_win->border.tr = ACS_URCORNER;
-		p_win->border.bl = ACS_LLCORNER;
-		p_win->border.br = ACS_LRCORNER;
+		p_win->border.ls = '|'; //ACS_VLINE;
+		p_win->border.rs = '|';//ACS_VLINE;
+		p_win->border.ts = '-';//ACS_HLINE;
+		p_win->border.bs = '-';//ACS_HLINE;
+		p_win->border.tl = '+';//ACS_ULCORNER;
+		p_win->border.tr = '+';//ACS_URCORNER;
+		p_win->border.bl = '+';//ACS_LLCORNER;
+		p_win->border.br = '+';//ACS_LRCORNER;
 	}
 
 }
 
 
 
-void print_win_params(ROOM *p_win)
+void printWinParams(ROOM *p_win)
 {
 #ifdef _DEBUG
 	mvprintw(25, 0, "%d %d %d %d", p_win->startx, p_win->starty, 
@@ -64,7 +64,7 @@ void print_win_params(ROOM *p_win)
 }
 
 
-void create_box_borders(ROOM *p_win, bool flag)
+void createBoxBorders(ROOM *p_win, bool flag)
 {	int i, j;
 	int x, y, w, h;
 
@@ -83,7 +83,6 @@ void create_box_borders(ROOM *p_win, bool flag)
 		mvhline(y + h, x + 1, p_win->border.bs, w - 1); // BOTTOM HORIZONTAL LINE
 		mvvline(y + 1, x, p_win->border.ls, h - 1); // LEFT HORIZONTAL LINE
 		mvvline(y + 1, x + w, p_win->border.rs, h - 1); // RIGHT HORIZONTAL LINE
-
 	} // erase
 	else
 		for(j = y; j <= y + h; ++j)
@@ -94,7 +93,7 @@ void create_box_borders(ROOM *p_win, bool flag)
 
 }
 
-void create_box_full(ROOM *p_win, bool flag)
+void createBoxFull(ROOM *p_win, bool flag)
 {
 	int i,j;
 	int x,y,w,h;
@@ -145,38 +144,45 @@ bool checkAllOverlap(ROOM * rooms,int n)
 	return FALSE;
 }
 
-void layout_rooms(ROOM * rooms, int num, int MAP_HEIGHT, int MAP_WIDTH)
+void layoutRooms(ROOM * rooms, int num, int MAP_HEIGHT, int MAP_WIDTH)
 {
-
+	int ROOM_MIN_WIDTH = 2;
+	int ROOM_MIN_HEIGHT = 2;
 	int ROOM_MAX_WIDTH =  20;
 	int ROOM_MAX_HEIGHT = 10;
 	int width, height, startx, starty, n;
 
-	width = rand() % (ROOM_MAX_WIDTH + 1);
+	width = rand() % (ROOM_MAX_WIDTH + 1) ;
 	height = rand() % (ROOM_MAX_HEIGHT + 1);
 
 	startx = rand() % (MAP_WIDTH + 1) + 1;
 	starty = rand() % (MAP_HEIGHT + 1) + 1;
 	rooms[0].is_passage = FALSE;
 
-	init_win_params(&rooms[0], height, width, starty, startx);
+	initWinParams(&rooms[0], height, width, starty, startx);
 
 	for (n = 0; n < num; n++)
 	{
 		do
 		{
-			width = rand() % (ROOM_MAX_WIDTH + 1);
-			height = rand() % (ROOM_MAX_HEIGHT + 1);
+			width = ROOM_MIN_WIDTH + rand() % (ROOM_MAX_WIDTH + 1);
+			height = ROOM_MIN_HEIGHT + rand() % (ROOM_MAX_HEIGHT + 1);
 
 			startx = rand() % (MAP_WIDTH + 1) + 1;
 			starty = rand() % (MAP_HEIGHT + 1) + 1;
 			rooms[n].is_passage = FALSE;
 
-			init_win_params(&rooms[n], height, width, starty, startx);
+			initWinParams(&rooms[n], height, width, starty, startx);
 
 		} while (checkAllOverlap(rooms,n));
-
-		create_box_full(&rooms[n], TRUE);
 		
 	}
 }
+
+/* void assignDoors(ROOM * rooms, int N_ROOMS, int MAX_DOOR_NUM)
+{
+	for (int i = 0; i < N_ROOMS; i++)
+	{
+		rooms[i]
+	}
+} */

@@ -18,15 +18,15 @@ typedef struct _ROOM_struct {
 	WIN_BORDER border;
 }ROOM;
 
-void toggle_win(WINDOW *p_win);
-void init_win_params(ROOM *p_win, int height, int width, int init_y, int init_x);
-void print_win_params(ROOM *p_win);
-void create_box_borders(ROOM *win, bool flag);
-void create_box_full(ROOM *win, bool flag);
+void toggleWin(WINDOW *p_win);
+void initWinParams(ROOM *p_win, int height, int width, int init_y, int init_x);
+void printWinParams(ROOM *p_win);
+void createBoxBorders(ROOM *win, bool flag);
+void createBoxFull(ROOM *win, bool flag);
 
 bool valueInRange(int value, int min, int max);
 bool rectOverlap(ROOM A, ROOM B);
 bool checkAllOverlap(ROOM * rooms,int n);
-void layout_rooms(ROOM * rooms, int num, int MAP_HEIGHT, int MAP_WIDTH);
+void layoutRooms(ROOM * rooms, int num, int MAP_HEIGHT, int MAP_WIDTH);
 
 #endif
