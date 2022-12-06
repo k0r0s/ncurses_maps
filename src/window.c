@@ -80,6 +80,7 @@ void drawBoxBorder(ROOM *p_win, bool flag)
 		mvaddch(y, x + w, p_win->border.tr); // TOP RIGHT CORNER
 		mvaddch(y + h, x, p_win->border.bl); // BOTTOM LEFT CORNER
 		mvaddch(y + h, x + w, p_win->border.br); // BOTTOM RIGHT CORNER
+
 		mvhline(y, x + 1, p_win->border.ts, w - 1); // TOP HORIZONTAL LINE
 		mvhline(y + h, x + 1, p_win->border.bs, w - 1); // BOTTOM HORIZONTAL LINE
 		mvvline(y + 1, x, p_win->border.ls, h - 1); // LEFT HORIZONTAL LINE
@@ -147,10 +148,10 @@ bool checkAllOverlap(ROOM * rooms,int n)
 
 void layoutRooms(ROOM * rooms, int num, int MAP_HEIGHT, int MAP_WIDTH)
 {
-	int ROOM_MIN_WIDTH = 2;
-	int ROOM_MIN_HEIGHT = 2;
+	int ROOM_MIN_WIDTH = 5;
+	int ROOM_MIN_HEIGHT = 5;
 	int ROOM_MAX_WIDTH =  20;
-	int ROOM_MAX_HEIGHT = 10;
+	int ROOM_MAX_HEIGHT = 5;
 	int width, height, startx, starty, n;
 
 	width = rand() % (ROOM_MAX_WIDTH + 1) ;
@@ -166,11 +167,11 @@ void layoutRooms(ROOM * rooms, int num, int MAP_HEIGHT, int MAP_WIDTH)
 	{
 		do
 		{
-			width = ROOM_MIN_WIDTH + rand() % (ROOM_MAX_WIDTH + 1);
-			height = ROOM_MIN_HEIGHT + rand() % (ROOM_MAX_HEIGHT + 1);
+			width = ROOM_MIN_WIDTH + rand() % (ROOM_MAX_WIDTH + 1 - ROOM_MIN_WIDTH);
+			height = ROOM_MIN_HEIGHT + rand() % (ROOM_MAX_HEIGHT + 1 - ROOM_MIN_WIDTH);
 
-			startx = rand() % (MAP_WIDTH + 1) + 1;
-			starty = rand() % (MAP_HEIGHT + 1) + 1;
+			startx = width + rand() % ((MAP_WIDTH - (width+5)) - width); // rand()%((nMax+1)-nMin) + nMin;
+			starty = height +  rand() % ((MAP_HEIGHT - (height+5)) - height);
 			rooms[n].is_passage = FALSE;
 
 			initWinParams(&rooms[n], height, width, starty, startx);
@@ -180,13 +181,26 @@ void layoutRooms(ROOM * rooms, int num, int MAP_HEIGHT, int MAP_WIDTH)
 	}
 }
 
-void assignConnections(ROOM * rooms, int N_ROOMS, int MAX_CONN_NUM)
+void assignNumConnections(ROOM * rooms, int N_ROOMS, int MAX_CONN_NUM)
 {
 	for (int i = 0; i < N_ROOMS; i++)
 	{
 		rooms[i].connects = 1 + rand() % (MAX_CONN_NUM);
-		int closest[rooms[i].connects];
+		int * closest = malloc(rooms[i].connects*sizeof(int));
 		rooms[i].closest = closest;
+	}
+}
+
+void assignRandomClosest(ROOM * rooms, int N_ROOMS)
+{
+	for (int i = 0; i < N_ROOMS; i++)
+	{
+		for (int j = 0; j < rooms[i].connects; j++)
+		{
+			int k = rand() % (N_ROOMS);
+			k == i ? MAX(i + 1, N_ROOMS - 1) : k;
+			rooms[i].closest[j] = k;
+		}
 	}
 }
 
@@ -239,18 +253,21 @@ void drawConnections(ROOM * rooms, int N_ROOMS)
 	{
 		for (int j = 0; j < rooms[i].connects; j++)
 		{
-			distx = rooms[i].centerx - rooms[rooms[i].closest[j]].centerx;
-			disty = rooms[i].centery - rooms[rooms[i].closest[j]].centery;
+			distx =rooms[rooms[i].closest[j]].centerx - rooms[i].centerx;
+			disty = rooms[rooms[i].closest[j]].centery - rooms[i].centery;
 
 			if (rand() % 2 != 0) 
 			{
-				mvhline(rooms[i].centery, rooms[i].centerx, rooms[i].border.bs, distx);
+				mvhline(rooms[i].centery, rooms[i].centerx, ACS_CKBOARD, distx);
+				mvvline(rooms[i].centery, rooms[i].centerx + distx, ACS_CKBOARD, disty);
 			}
 			else 
 			{
-				mvhline(rooms[i].centery, rooms[i].centerx, rooms[i].border.ts, distx);
+				mvvline(rooms[i].centery, rooms[i].centerx, ACS_CKBOARD, disty);
+				mvhline(rooms[i].centery + disty, rooms[i].centerx, ACS_CKBOARD, distx);
 			}
 		}
+		refresh();
 
 	}
 	//initWinParams(&rooms[n], height, width, starty, startx);

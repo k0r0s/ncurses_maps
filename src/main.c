@@ -47,17 +47,16 @@ int main(int c, char *argv[])
     while (ch != KEY_F(1))
     {
 		
-        layoutRooms(rooms,N_ROOMS,LINES-2,COLS-2);
-		assignConnections(rooms,N_ROOMS,3);
+        layoutRooms(rooms,N_ROOMS,LINES,COLS);
+		assignNumConnections(rooms,N_ROOMS,5);
 		getCenters(rooms,N_ROOMS);
 		getDistancesToClosest(rooms,N_ROOMS);
-
 		clear();
 		for (int i = 0; i < N_ROOMS; i ++)
 		{
-			drawBoxBorder(&rooms[i], TRUE);
+			drawBoxFull(&rooms[i], TRUE);
 		}
-		//drawConnections(rooms,N_ROOMS); causes SegFault ! xD
+		drawConnections(rooms,N_ROOMS);
 		
         ch = getch();
         toggleWin(small_win);
