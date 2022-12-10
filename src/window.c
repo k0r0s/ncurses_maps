@@ -99,7 +99,7 @@ void drawBoxFull(ROOM *p_win, bool flag)
 	{
 		for (j = y; j < y + h; ++j)
 			for (i = x; i < x + w; ++i)
-				mvaddch(j, i, ACS_CKBOARD);
+				mvaddch(j, i, '#');
 	} // erase
 	else
 		for (j = y; j <= y + h; ++j)
@@ -249,13 +249,13 @@ void drawLine(int starty, int startx, int finaly, int finalx)
 	case TRUE: 
 		for (starty; starty <= finaly; starty++)
 		{
-			mvaddch(starty, startx, ACS_CKBOARD);
+			mvaddch(starty, startx, '#');
 		}
 		break;
 	case FALSE:
 		for (starty; starty >= finaly; starty--)
 		{
-			mvaddch(starty, startx, ACS_CKBOARD);
+			mvaddch(starty, startx, '#');
 		}
 		break;
 	}
@@ -265,13 +265,13 @@ void drawLine(int starty, int startx, int finaly, int finalx)
 	case TRUE: 
 		for (startx; startx < finalx; startx++)
 		{
-			mvaddch(starty, startx, ACS_CKBOARD);
+			mvaddch(starty, startx, '#');
 		}
 		break;
 	case FALSE:
 		for (startx; startx > finalx; startx--)
 		{
-			mvaddch(starty, startx, ACS_CKBOARD);
+			mvaddch(starty, startx, '#');
 		}
 		break;
 	}
@@ -280,7 +280,6 @@ void drawLine(int starty, int startx, int finaly, int finalx)
 void drawConnections(ROOM *rooms, int N_ROOMS)
 {
 	int distx, disty;
-
 	for (int i = 0; i < N_ROOMS; i++)
 	{
 		for (int j = 0; j < rooms[i].connects; j++)
@@ -289,7 +288,7 @@ void drawConnections(ROOM *rooms, int N_ROOMS)
 			disty = rooms[rooms[i].closest[j]].centery - rooms[i].centery;
 			drawLine(rooms[i].centery, rooms[i].centerx, rooms[i].centery + disty, rooms[i].centerx + distx);
 		}
-		refresh();
+	refresh();
 	}
 	// initWinParams(&rooms[n], height, width, starty, startx);
 }
