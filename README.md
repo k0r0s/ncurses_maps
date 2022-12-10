@@ -1,4 +1,4 @@
-<img src="https://github.com/k0r0s/project_n1/blob/main/misc/maps.png" width="100%"></img>
+<img src="https://github.com/k0r0s/ncurses_maps/blob/master/misc/maps.png" width="100%"></img>
 
 # ncurses_maps
 
