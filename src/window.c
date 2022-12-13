@@ -177,7 +177,7 @@ void assignNumConnections(ROOM *rooms, int N_ROOMS, int MAX_CONN_NUM)
 {
 	for (int i = 0; i < N_ROOMS; i++)
 	{
-		rooms[i].connects = rand() % ((MAX_CONN_NUM + 1) - 2) + 2; // rand()%((nMax+1)-nMin) + nMin;
+		rooms[i].connects = rand() % ((MAX_CONN_NUM + 1) - 1) + 1; // rand()%((nMax+1)-nMin) + nMin;
 		int *closest = malloc(rooms[i].connects * sizeof(int));
 		rooms[i].closest = closest;
 	}
@@ -213,31 +213,31 @@ int cmpfunc(const void *a, const void *b)
 void getDistancesToClosest(ROOM *rooms, int N_ROOMS) // THIS IS WRONG
 {
 	int distancesCenter[N_ROOMS][N_ROOMS];
-	int *original = malloc(N_ROOMS * sizeof(int));
-
-	for (int i = 0; i < N_ROOMS; i++)
+	int imut_distcmp[N_ROOMS][N_ROOMS];
+	int i, j;
+	for (i = 0; i < N_ROOMS; i++)
 	{
-		for (int j = 0; j < N_ROOMS; j++)
+		for (j = 0; j < N_ROOMS; j++)
 		{
 			distancesCenter[i][j] = (rooms[i].centerx - rooms[j].centerx) * (rooms[i].centerx - rooms[j].centerx) +
 									(rooms[i].centery - rooms[j].centery) * (rooms[i].centery - rooms[j].centery);
+			
+			imut_distcmp[i][j] = distancesCenter[i][j];
 		}
-		memcpy(original, distancesCenter[i], N_ROOMS * sizeof(int));
-		qsort(distancesCenter[i], N_ROOMS, sizeof(int), cmpfunc);
-
-		for (int j = 0; j < rooms[i].connects; j++)
+		qsort(distancesCenter[i], N_ROOMS,sizeof(int),cmpfunc);
+		for (j = 1; j < rooms[i].connects + 1; j++)
 		{
-			int k = 0;
-			do {
-					k == i ? i+1 : i;
-					if (distancesCenter[i][j] == original[k])
-					{
-						rooms[i].closest[j] = k;
-					}
-					k++;
-			} while (k < N_ROOMS);
+			for (int k = 0; k < N_ROOMS; k++)
+			{
+				if (distancesCenter[i][j] == imut_distcmp[i][k])
+				{
+					rooms[i].closest[j-1] = k;
+				}
+			}
 		}
 	}
+	
+	
 }
 
 void drawLine(int starty, int startx, int finaly, int finalx)
@@ -246,7 +246,7 @@ void drawLine(int starty, int startx, int finaly, int finalx)
 	int diffx = finalx - startx;
 	switch (diffy > 0)
 	{
-	case TRUE: 
+	case TRUE:
 		for (starty; starty <= finaly; starty++)
 		{
 			mvaddch(starty, startx, '#');
@@ -260,9 +260,9 @@ void drawLine(int starty, int startx, int finaly, int finalx)
 		break;
 	}
 
-	switch(diffx > 0 )
+	switch (diffx > 0)
 	{
-	case TRUE: 
+	case TRUE:
 		for (startx; startx < finalx; startx++)
 		{
 			mvaddch(starty, startx, '#');
@@ -288,7 +288,7 @@ void drawConnections(ROOM *rooms, int N_ROOMS)
 			disty = rooms[rooms[i].closest[j]].centery - rooms[i].centery;
 			drawLine(rooms[i].centery, rooms[i].centerx, rooms[i].centery + disty, rooms[i].centerx + distx);
 		}
-	refresh();
+		refresh();
 	}
 	// initWinParams(&rooms[n], height, width, starty, startx);
 }
