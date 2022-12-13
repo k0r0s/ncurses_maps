@@ -58,7 +58,7 @@ int main(int c, char *argv[])
     {
 		
         layoutRooms(rooms,N_ROOMS,LINES,COLS);
-		assignNumConnections(rooms,N_ROOMS,3);
+		assignNumConnections(rooms,N_ROOMS,2);
 		getCenters(rooms,N_ROOMS);
 		getDistancesToClosest(rooms,N_ROOMS);
 		clear();
