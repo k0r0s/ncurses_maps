@@ -41,7 +41,7 @@ int main(int c, char *argv[])
 	getch();
 
     /* CREATE AND DISPLAY THE SMALL WINDOW */
-    small_win = newwin(10, 30, 3,3);
+    small_win = newwin(10, COLS - 20, LINES - 11, 1);
 	box(small_win, 0, 0);
 	mvwaddstr(small_win, 1,1,"<HELP>");
 	mvwaddstr(small_win, 3,3,"F1<QUIT>");
@@ -67,11 +67,11 @@ int main(int c, char *argv[])
 			drawBoxFull(&rooms[i], TRUE);
 		}
 		drawConnections(rooms,N_ROOMS);
-
+		box(base_win, 0, 0);
+		refresh();
         ch = getch();
         toggleWin(small_win);
         ch = getch();
-        box(base_win, 0, 0);
         toggleWin(base_win);     
 
 
