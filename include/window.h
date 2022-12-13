@@ -21,6 +21,18 @@ typedef struct _ROOM_struct {
 	WIN_BORDER border;
 }ROOM;
 
+static bool m_done;
+
+void setup();
+void teardown();
+int getKey();
+void startDraw();
+void endDraw();
+bool isDone();
+void quit();
+void titleScreen(WINDOW *p_win);
+
+
 void toggleWin(WINDOW *p_win);
 void initWinParams(ROOM *p_win, int height, int width, int init_y, int init_x);
 void printWinParams(ROOM *p_win);

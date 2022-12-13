@@ -4,12 +4,85 @@
 #include <string.h>
 #include <stdbool.h>
 
+
+void setup()
+{
+	initscr();
+	raw();
+	initscr();
+	if (has_colors() == FALSE)
+	{
+		endwin();
+		printf("Your terminal does not support color. \n");
+		exit(1);
+	}
+	start_color();
+	cbreak();
+    keypad(stdscr, TRUE);		/* I need that nifty F1 	*/
+	noecho();
+	m_done = FALSE;
+}
+
+void teardown()
+{
+	endwin();
+}
+
+int getKey()
+{
+	return getch();
+}
+
+void startDraw()
+{
+	clear();
+}
+
+void endDraw()
+{
+	refresh();
+}
+
+
+bool isDone()
+{
+	return m_done;
+}
+
+
+void quit()
+{
+	m_done = TRUE;
+}
+
 void toggleWin(WINDOW *p_win)
 {
 	touchwin(p_win);
-	wrefresh(p_win);
+	wrefresh(p_win); 
 }
 
+void titleScreen(WINDOW *p_win)
+{
+/*
+                  __  __         _                         
+                 / _|/ _|       | |                        
+  ___  ___ _   _| |_| |_ ___  __| |  _ __ ___   __ _ _ __  
+ / __|/ __| | | |  _|  _/ _ \/ _` | | '_ ` _ \ / _` | '_ \ 
+ \__ \ (__| |_| | | | ||  __/ (_| | | | | | | | (_| | |_) |
+ |___/\___|\__,_|_| |_| \___|\__,_| |_| |_| |_|\__,_| .__/ 
+                                                    | |    
+                                                    |_|  */
+
+mvwaddstr(p_win, 2, 20, "                  __  __         _                         ");
+mvwaddstr(p_win, 3, 20, "                 / _|/ _|       | |                        ");
+mvwaddstr(p_win, 4, 20, "  ___  ___ _   _| |_| |_ ___  __| |  _ __ ___   __ _ _ __  ");
+mvwaddstr(p_win, 5, 20, " / __|/ __| | | |  _|  _/ _ \\/ _` | | '_ ` _ \\ / _` | '_ \\ ");
+mvwaddstr(p_win, 6, 20, " \\__ \\ (__| |_| | | | ||  __/ (_| | | | | | | | (_| | |_) |");
+mvwaddstr(p_win, 7, 20, " |___/\\___|\\__,_|_| |_| \\___|\\__,_| |_| |_| |_|\\__,_| .__/ ");
+mvwaddstr(p_win, 8, 20, "                                                    | |    ");
+mvwaddstr(p_win, 9, 20, "                                                    |_|    ");
+
+}
 void initWinParams(ROOM *p_win, int height, int width, int init_y, int init_x)
 {
 	if (p_win->is_passage) // TODO change -- only works for horizontal passages.
