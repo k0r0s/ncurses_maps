@@ -5,7 +5,7 @@ OUTDIR = ./bin
 
 
 
-all: map run
+all: map run clean
 
 map: 
 	$(CC) $(SOURCES) $(CFLAGS) -o $(OUTDIR)/map
