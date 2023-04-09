@@ -5,14 +5,14 @@ OUTDIR = ./bin
 
 
 
-all: map run clean
+all: map run
 
 map: 
 	$(CC) $(SOURCES) $(CFLAGS) -o $(OUTDIR)/map
 run: 
-	./bin/map
+	$(OUTDIR)/map
 
 clean:
-	rm bin/*
+	rm $(OUTDIR)/*
 
 #if [ -d "${OUTDIR}" ]; then rm -r ${OUTDIR}; fi 
