@@ -1,3 +1,6 @@
+# stack overflow link: https://stackoverflow.com/questions/5178125/how-to-place-object-files-in-separate-subdirectory
+# for due credit.
+
 #Compiler and Linker
 CC          := gcc
 
