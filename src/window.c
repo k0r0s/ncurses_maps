@@ -1,10 +1,9 @@
 #include <ncurses.h>
-#include <window.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
 
-
+#include "window.h"
 void setup()
 {
 	initscr();
@@ -63,25 +62,7 @@ void toggleWin(WINDOW *p_win)
 
 void titleScreen(WINDOW *p_win)
 {
-/*
-                  __  __         _                         
-                 / _|/ _|       | |                        
-  ___  ___ _   _| |_| |_ ___  __| |  _ __ ___   __ _ _ __  
- / __|/ __| | | |  _|  _/ _ \/ _` | | '_ ` _ \ / _` | '_ \ 
- \__ \ (__| |_| | | | ||  __/ (_| | | | | | | | (_| | |_) |
- |___/\___|\__,_|_| |_| \___|\__,_| |_| |_| |_|\__,_| .__/ 
-                                                    | |    
-                                                    |_|  */
-
-mvwaddstr(p_win, 2, 20, "                  __  __         _                         ");
-mvwaddstr(p_win, 3, 20, "                 / _|/ _|       | |                        ");
-mvwaddstr(p_win, 4, 20, "  ___  ___ _   _| |_| |_ ___  __| |  _ __ ___   __ _ _ __  ");
-mvwaddstr(p_win, 5, 20, " / __|/ __| | | |  _|  _/ _ \\/ _` | | '_ ` _ \\ / _` | '_ \\ ");
-mvwaddstr(p_win, 6, 20, " \\__ \\ (__| |_| | | | ||  __/ (_| | | | | | | | (_| | |_) |");
-mvwaddstr(p_win, 7, 20, " |___/\\___|\\__,_|_| |_| \\___|\\__,_| |_| |_| |_|\\__,_| .__/ ");
-mvwaddstr(p_win, 8, 20, "                                                    | |    ");
-mvwaddstr(p_win, 9, 20, "                                                    |_|    ");
-
+mvwaddstr(p_win, 1, 1, "TITLE GOES HERE!");
 }
 void initWinParams(ROOM *p_win, int height, int width, int init_y, int init_x)
 {
