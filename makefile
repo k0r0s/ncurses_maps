@@ -30,7 +30,7 @@ SOURCES     := $(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
 OBJECTS     := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.$(OBJEXT)))
 
 #Defauilt Make
-all: $(TARGET) run
+all: directories $(TARGET) run
 
 run: 
 	$(TARGETDIR)/$(TARGET)
@@ -58,9 +58,8 @@ cleaner: clean
 -include $(OBJECTS:.$(OBJEXT)=.$(DEPEXT))
 
 #Link
-$(TARGET): $(OBJECTS)
+$(TARGET): $(OBJECTS) 
 	$(CC) -o $(TARGETDIR)/$(TARGET) $^ $(LIB)
-
 #Compile
 $(BUILDDIR)/%.$(OBJEXT): $(SRCDIR)/%.$(SRCEXT)
 	@mkdir -p $(dir $@)
