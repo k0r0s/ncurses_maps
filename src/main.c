@@ -86,5 +86,9 @@ int main(int c, char *argv[])
 	}
 
 	teardown();
+	free(rooms);
+
+	killWin(small_win_s);
+	killWin(base_win_s);
 	return (0);
 }

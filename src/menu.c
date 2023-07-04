@@ -15,23 +15,30 @@ win_struct_t * initWin(win_size_t size, initWinFun pFun)
 	return win_s;
 }
 
-
-void initBaseWin(WINDOW * win)
+void titleScreen(WINDOW *p_win)
 {
-	assert(win);
-	box(win, 0, 0);
-	titleScreen(win);
+mvwaddstr(p_win, 1, 1, "TITLE GOES HERE!");
 }
 
-void initTabWin(WINDOW * win)
+void initBaseWin(WINDOW * p_win)
 {
-	assert(win);
-	box(win, 0, 0);
-	mvwaddstr(win, 1, 1, "<HELP>");
-	mvwaddstr(win, 3, 3, "F1<QUIT>");
-	mvwaddstr(win, 4, 3, "BACKSPACE \t<MAIN MENU>");
-	mvwaddstr(win, 5, 3, "TAB \t \t<SUBMENU>");
-	mvwaddstr(win, 6, 3, "ANY KEY\t<GENERATE MAP>");
+	assert(p_win);
+	box(p_win, 0, 0);
+	titleScreen(p_win);
 }
 
+void initTabWin(WINDOW * p_win)
+{
+	assert(p_win);
+	box(p_win, 0, 0);
+	mvwaddstr(p_win, 1, 1, "<HELP>");
+	mvwaddstr(p_win, 3, 3, "F1\t\t<QUIT>");
+	mvwaddstr(p_win, 4, 3, "BACKSPACE \t<MAIN MENU>");
+	mvwaddstr(p_win, 5, 3, "TAB \t \t<SUBMENU>");
+	mvwaddstr(p_win, 6, 3, "ANY KEY\t<GENERATE MAP>");
+}
 
+void killWin(win_struct_t * win_s)
+{
+	free(win_s);
+}

@@ -21,7 +21,9 @@ typedef struct win_struct_tag {
 
 typedef void (*initWinFun)(WINDOW * win);
 win_struct_t * initWin(win_size_t win_s, initWinFun pFun);
-void initBaseWin(WINDOW * win);
-void initTabWin(WINDOW * win);
+void killWin(win_struct_t * win_s);
+void titleScreen(WINDOW * p_win);
+void initBaseWin(WINDOW * p_win);
+void initTabWin(WINDOW * p_win);
 
 #endif /* MENU_H */

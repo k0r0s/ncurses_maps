@@ -60,10 +60,8 @@ void toggleWin(WINDOW *p_win)
 	wrefresh(p_win); 
 }
 
-void titleScreen(WINDOW *p_win)
-{
-mvwaddstr(p_win, 1, 1, "TITLE GOES HERE!");
-}
+
+
 void initWinParams(ROOM *p_win, int height, int width, int init_y, int init_x)
 {
 	if (p_win->is_passage) // TODO change -- only works for horizontal passages.
