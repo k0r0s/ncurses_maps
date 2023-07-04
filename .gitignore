@@ -10,8 +10,8 @@
 # Local History for Visual Studio Code
 .history/
 # Object Files
-.obj/
+.obj/*
 # Binaries
-.bin/
+.bin/*
 # Built Visual Studio Code Extensions
 *.vsix
